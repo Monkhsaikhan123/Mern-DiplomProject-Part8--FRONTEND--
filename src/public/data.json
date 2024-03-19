@@ -1,0 +1,294 @@
+
+    [
+        {
+          "name": "Tomato",
+          "description": "Red, juicy fruit often used as a vegetable",
+          "price": "2.99",
+          "category": "Vegetable",
+          "quantity": "40"
+        },
+        {
+          "name": "Cucumber",
+          "description": "Green, refreshing vegetable often used in salads",
+          "price": "1.49",
+          "category": "Vegetable",
+          "quantity": "40"
+        },
+        {
+          "name": "Lettuce",
+          "description": "Leafy green vegetable used as a base for salads",
+          "price": "0.99",
+          "category": "Vegetable",
+          "quantity": "40"
+        },
+        {
+          "name": "Carrot",
+          "description": "Orange root vegetable known for its high vitamin A content",
+          "price": "0.79",
+          "category": "Vegetable",
+          "quantity": "40"
+        },
+        {
+          "name": "Bell Pepper",
+          "description": "Colorful vegetable often used in stir-fries and salads",
+          "price": "1.99",
+          "category": "Vegetable",
+          "quantity": "40"
+        },
+        {
+          "name": "Zucchini",
+          "description": "Green summer squash with a mild flavor",
+          "price": "1.29",
+          "category": "Vegetable",
+          "quantity": "40"
+        },
+        {
+          "name": "Eggplant",
+          "description": "Purple vegetable with a spongy texture, often used in Mediterranean dishes",
+          "price": "2.49",
+          "category": "Vegetable",
+          "quantity": "40"
+        },
+        {
+          "name": "Spinach",
+          "description": "Dark, leafy green vegetable known for its high iron content",
+          "price": "1.99",
+          "category": "Vegetable",
+          "quantity": "40"
+        },
+        {
+          "name": "Cabbage",
+          "description": "Leafy green or purple vegetable often used in coleslaw and sauerkraut",
+          "price": "0.89",
+          "category": "Vegetable",
+          "quantity": "40"
+        },
+        {
+          "name": "Broccoli",
+          "description": "Green vegetable known for its dense, flowery heads",
+          "price": "1.79",
+          "category": "Vegetable",
+          "quantity": "40"
+        },
+        {
+          "name": "Cauliflower",
+          "description": "White vegetable with a mild, nutty flavor",
+          "price": "1.99",
+          "category": "Vegetable",
+          "quantity": "40"
+        },
+        {
+          "name": "Onion",
+          "description": "Pungent vegetable often used as a base for many dishes",
+          "price": "0.69",
+          "category": "Vegetable",
+          "quantity": "40"
+        },
+        {
+          "name": "Garlic",
+          "description": "Aromatic vegetable known for its strong flavor",
+          "price": "0.79",
+          "category": "Vegetable",
+          "quantity": "40"
+        },
+        {
+          "name": "Potato",
+          "description": "Starchy vegetable often used in a variety of dishes",
+          "price": "0.49",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Sweet Potato",
+          "description": "Orange root vegetable with a sweet flavor",
+          "price": "0.99",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Mushroom",
+          "description": "Edible fungus with a unique texture and flavor",
+          "price": "2.49",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Cilantro",
+          "description": "Herb with a fresh, citrusy flavor often used in Mexican cuisine",
+          "price": "0.99",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Parsley",
+          "description": "Herb with a mild, grassy flavor often used as a garnish",
+          "price": "0.79",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Basil",
+          "description": "Aromatic herb often used in Italian dishes",
+          "price": "1.29",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Thyme",
+          "description": "Herb with a strong, earthy flavor often used in soups and stews",
+          "price": "1.49",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Rosemary",
+          "description": "Fragrant herb with a pine-like flavor often used in roasted meats",
+          "price": "1.99",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Oregano",
+          "description": "Herb with a bold, savory flavor often used in Mediterranean cuisine",
+          "price": "1.29",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Dill",
+          "description": "Herb with a tangy, slightly bitter flavor often used in pickling",
+          "price": "0.99",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Chives",
+          "description": "Herb with a mild onion flavor often used as a garnish",
+          "price": "0.79",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Sage",
+          "description": "Herb with a strong, savory flavor often used in stuffing",
+          "price": "1.99",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Cayenne Pepper",
+          "description": "Spicy pepper often used to add heat to dishes",
+          "price": "2.49",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Paprika",
+          "description": "Mild pepper often used to add color and flavor to dishes",
+          "price": "1.49",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Black Pepper",
+          "description": "Common spice used to add flavor to a variety of dishes",
+          "price": "0.99",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Salt",
+          "description": "Mineral often used to enhance the flavor of food",
+          "price": "0.49",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Sugar",
+          "description": "Sweetener often used in baking and cooking",
+          "price": "0.79",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Flour",
+          "description": "Powder made from grinding grains, often used in baking",
+          "price": "1.29",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Olive Oil",
+          "description": "Healthy oil often used in cooking and dressing salads",
+          "price": "2.99",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Vinegar",
+          "description": "Sour liquid often used in cooking and as a condiment",
+          "price": "0.99",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Soy Sauce",
+          "description": "Salty sauce often used in Asian cooking",
+          "price": "1.49",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Honey",
+          "description": "Sweet, viscous liquid produced by bees",
+          "price": "2.49",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Ginger",
+          "description": "Spicy root often used in Asian and Indian cuisine",
+          "price": "1.99",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Turmeric",
+          "description": "Yellow spice often used in curries and as a natural dye",
+          "price": "1.79",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        },
+        {
+          "name": "Coriander",
+          "description": "Herb with a citrusy flavor often used in Indian and Mexican cuisine",
+          "price": "1.29",
+          "category": "Vegetable",
+          "quantity": "40",
+          "image": "/src/assets/6.jpg"
+        }
+      ]

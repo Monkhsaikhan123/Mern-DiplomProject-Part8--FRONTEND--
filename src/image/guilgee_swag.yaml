@@ -1,0 +1,1553 @@
+openapi: 3.0.3
+info:
+  title: CORPORATE GATEWAY ҮЙЛЧИЛГЭЭНИЙ ХОЛБОЛТЫН ГАРЫН АВЛАГА
+  description: |
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://doob.world:6442/v1
+tags:
+  - name: Гүйлгээ
+    description: Гүйлгээтэй холбоотой сервисүүд
+    externalDocs:
+      description: Find out more about our store
+      url: http://swagger.io
+paths:
+  /transfer/domestic:
+    post:
+      tags:
+        - Гүйлгээ
+      summary: ХААН БАНКНЫ ДАНС РУУ ГҮЙЛГЭЭ ХИЙХ /DOMESTIC TRANSFER/
+      description: Domestic transaction – ХААН Банкны данс руу гүйлгээ хийнэ.
+      operationId: getInventory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/TransferDomestic'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferDomesticResponse'
+      security:
+        - api_key: []
+  /transfer/interbank:
+    post:
+      tags:
+        - Гүйлгээ
+      summary: БУСАД БАНКНЫ ДАНС РУУ ГҮЙЛГЭЭ ХИЙХ /INTERBANK TRANSFER/
+      description: БУСАД БАНКНЫ ДАНС РУУ ГҮЙЛГЭЭ ХИЙХ /INTERBANK TRANSFER/
+      operationId: placeOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferInter'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferDomesticResponse'
+        '405':
+          description: Invalid input
+  /bulk/transaction/upload/base64/:
+      post:
+        tags:
+          - Гүйлгээ
+        summary: ФАЙЛ ШАЛГАХ – ЕРӨНХИЙ ТӨЛӨВ
+        description: Энэ endpoint-оор bulk гүйлгээний excel файлаа base64-өөр хөрвүүлж upload хийнэ. Амжилттай хавсаргасан бол response нь MasterID байна. Амжилтгүй тохиолдолд амжилтгүй болсон шалтгааныг харуулна. Тест URL https://doob.world:6442/v1/bulk/transaction/upload/base64/
+        operationId: postUpload
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/uploadFile'
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/uploadFileResponse'
+          '400':
+            description: Invalid input
+  /bulk/transaction/id/{masterId}/detailCorporate:
+    get:
+        tags:
+          - Гүйлгээ
+        summary: БАГЦ БОЛОН ГҮЙЛГЭЭНИЙ ЖАГСААЛТЫН ДЭЛГЭРЭНГҮЙ ЛАВЛАГАА
+        description: "Энэ endpoint-оор тухайн гүйлгээний файл дахь мөр бүрийн дэлгэрэнгүй мэдээллийг лавлаж боломжтой. Response нь гүйлгээний status гүйлгээний дүн, шимтгэл, гүйлгээний тоо, журнал гэх мэт тухайн гүйлгээний дэлгэрэнгүй мэдээллийг харуулна. Тест URL https://doob.world:6442/v1/bulk/transaction/id/{MasterID}/detailCorporate"
+        operationId: getDetail
+        parameters:
+          - in: path
+            name: masterId
+            required: true
+            schema:
+              type: array
+              items:
+                type: string
+              minItems: 1
+            style: matrix
+            explode: true
+          - in: query
+            name: metadata
+            schema:
+              type: boolean
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/stateResponseDetail'
+          '400':
+            description: Invalid input'
+  /bulk/transaction/id/{masterId}/remove:
+    post:
+        tags:
+          - Гүйлгээ
+        summary: АЛДААТАЙ ГҮЙЛГЭЭНИЙ ФАЙЛ УСТГАХ
+        description: "Хэрвээ таны хавсаргасан xls файл I, C, V-с бусад статус зааж алдаатай гүйлгээ илэрвэл тухайн файлаа энэ endpoint-оор устгаж, алдаатай гүйлгээний мөрийг зассаны дараа файлаа дахин хавсаргах шаардлагатай. Хавсаргасны дараа гүйлгээний хүсэлт гаргах дарааллыг мөрдөнө.
+Анхаарах: гүйлгээ хийж байх үед (I, C статус заасан) аль эсвэл тухайн файлыг баталгаажуулж дамжуулсан тохиолдолд файлыг устгах боломжгүй. Тест URL https://doob.world:6442/v1/bulk/transaction/id/{MasterID}/remove"
+        operationId: remove
+        parameters:
+          - in: path
+            name: masterId
+            required: true
+            schema:
+              type: array
+              items:
+                type: string
+              minItems: 1
+            style: matrix
+            explode: true
+          - in: query
+            name: metadata
+            schema:
+              type: boolean
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/message'
+          '400':
+            description: Invalid input'
+  /bulk/transaction/id/{masterId}/bulkTotransfer/salary:
+    post:
+        tags:
+          - Гүйлгээ
+        summary: БАГЦЫН БОЛОН ГҮЙЛГЭЭНИЙ ЖАГСААЛТ – ГҮЙЛГЭЭ ДАМЖУУЛАХ
+        description: "Энэ endpoint-г хавсаргасан файлын дагуу V төлөв заасан файлыг дамжуулахад ашиглана. Ингэхдээ Корпорэйт Гэтвэй үйлчилгээнд гүйлгээ хийх эрх бүхий ажилтны нэвтрэх нэр болон гүйлгээний нууц үгийг ашиглана. Тест URL https://doob.world:6442/v1/bulk/transaction/id/{MasterID}/remove"
+        operationId: damjuulah
+        parameters:
+          - in: path
+            name: masterId
+            required: true
+            schema:
+              type: array
+              items:
+                type: string
+              minItems: 1
+            style: matrix
+            explode: true
+          - in: query
+            name: metadata
+            schema:
+              type: boolean
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/salary'
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/salaryResponse'
+          '400':
+            description: Invalid input'
+  /bulk/transaction/id/corporate/{masterId}:
+      get:
+        tags:
+          - Гүйлгээ
+        summary: БАГЦ ГҮЙЛГЭЭНИЙ ФАЙЛ УНШУУЛАХ
+        description: Энэ endpoint-оор багц шилжүүлгийн болон жагсаалтын гүйгээний файл шалгалтийн төлөвийг Master ID-аар лавлана. Response нь гүйлгээний status гүйлгээний дүн, шимтгэл, гүйлгээний тоо, журнал зэрэг мэдээллийг агуулсан байх ба файл шалгалт амжилттай үед гүйлгээг хийнэ. Тест URL https://doob.world:6442/v1/bulk/transaction/id/corporate/{MASTERID}
+        operationId: findPetById
+        parameters:
+          - in: path
+            name: masterId
+            required: true
+            schema:
+              type: array
+              items:
+                type: integer
+              minItems: 1
+            style: matrix
+            explode: true
+          - in: query
+            name: metadata
+            schema:
+              type: boolean
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/stateResponse'
+          '400':
+            description: Invalid input'
+  /bulk/transaction/file/{YearMonthDate}:
+      get:
+        tags:
+          - Гүйлгээ
+        summary: БАГЦ ШИЛЖҮҮЛЭГ/ ГҮЙЛГЭЭНИЙ ЖАГСААЛТ ОГНООГООР ЛАВЛАХ
+        description: "Энэ endpoint-оор байгууллага өөрийн нийт дамжуулсан багц шилжүүлэг болон жагсаалтын бүх гүйлгээг он сараар лавлах боломжтой. Тест URL https://doob.world:6442/v1/bulk/transaction/file/listCorporate?beginDate={YearMonthDate}&endDate={YearMonthDate}&page=0&size=10"
+        operationId: findByDate
+        parameters:
+          - in: path
+            name: YearMonthDate
+            schema:
+              type: string
+            required: true
+            description: date
+          - in: query
+            name: beginDate
+            schema:
+              type: string
+            allowReserved: true 
+            required: true
+            description: degin date
+          - in: query
+            name: listCorporate
+            schema:
+              type: string
+            allowReserved: true 
+            required: true
+            description: degin date
+          - in: query
+            name: endDate
+            schema:
+              type: string
+            allowReserved: true 
+            required: true
+          - in: query
+            name: page
+            schema:
+              type: integer
+              minimum: 1
+              maximum: 100
+              default: 21
+            allowReserved: true 
+            required: true
+          - in: query
+            name: size
+            schema:
+              type: integer
+              minimum: 1
+              maximum: 100
+              default: 20
+            required: true
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/salaryResponse'
+          '400':
+            description: Invalid input'
+  /bulk/transaction/template/bulk-transaction/download:
+    get:
+      tags:
+        - Гүйлгээ
+      summary: БАГЦ ГҮЙЛГЭЭ ДАМЖУУЛАХ СЕРВИС
+      description: БАГЦ ГҮЙЛГЭЭ ДАМЖУУЛАХ СЕРВИС Тест URL https://doob.world:6442/v1/bulk/transaction/template/bulk-transaction/download
+      operationId: getOrderById
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/text:
+              schema:
+                type: string
+                format: string
+        '400':
+          description: Invalid ID supplied
+  /bulk/transaction/template/list-transaction/download:
+    get:
+      tags:
+        - Гүйлгээ
+      summary: БАГЦ ШИЛЖҮҮЛГИЙН ЖАГСААЛТ
+      description:  Шилжүүлгийн жагсаалт Тест URL https://doob.world:6442/v1/bulk/transaction/template/list-transaction/download
+      operationId: getListById
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/text:
+              schema:
+                type: string
+                format: string
+        '400':
+          description: Invalid ID supplied
+    
+    
+  
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        petId:
+          type: integer
+          format: int64
+          example: 198772
+        quantity:
+          type: integer
+          format: int32
+          example: 7
+        shipDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          description: Order Status
+          example: approved
+          enum:
+            - placed
+            - approved
+            - delivered
+        complete:
+          type: boolean
+      xml:
+        name: order
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 100000
+        username:
+          type: string
+          example: fehguy
+        address:
+          type: array
+          xml:
+            name: addresses
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/Address'
+      xml:
+        name: customer
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          example: 437 Lytton
+        city:
+          type: string
+          example: Palo Alto
+        state:
+          type: string
+          example: CA
+        zip:
+          type: string
+          example: '94301'
+      xml:
+        name: address
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Dogs
+      xml:
+        name: category
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+        phone:
+          type: string
+          example: '12345'
+        userStatus:
+          type: integer
+          description: User Status
+          format: int32
+          example: 1
+      xml:
+        name: user
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      xml:
+        name: tag
+    Token:
+      required:
+        - username
+        - password
+      type: object
+      properties:
+        username:
+          type: string
+          example: string
+          description: Хэрэглэгчийн нэр
+        password: 
+          type: string
+          example: string
+          description: Хэрэглэгчийн нууц үг
+      xml:
+        name: token
+    TokenResponse:
+      required:
+        - token
+        - developer_email
+      type: object
+      properties:
+        token:
+          type: string
+          example: epF4ULQN6BeGZGcWgINCTnaEjz3v
+          description: Хэрэглэгчийн нууц үг
+        developer_email: 
+          type: string
+          example: user@gmail.com
+          description: Баталгаат имэйл хаяг
+      xml:
+        name: tokenResponse
+    AccountsResponse:
+      required:
+        - number
+        - type
+        - currency
+        - status
+        - balance
+        - name
+        - holdBalance
+        - avaliableBalance
+      type: object
+      properties:
+        number:
+          type: string
+          example: string
+          description: Дансны дугаар
+        type: 
+          type: string
+          example: string
+          description: Дансны төрөл
+        currency:
+          type: string
+          example: string
+          description: Дансны валют
+        status:
+          type: string
+          example: string
+          description: Төлөв
+        balance:
+          type: integer
+          example: double
+          description: Үлдэгдэл
+        name:
+          type: string
+          example: string
+          description: Дансны нэр
+        holdBalance:
+          type: integer
+          example: double
+          description: Барилт хийсэн дүн
+        avaliableBalance:
+          type: integer
+          example: double
+          description: Боломжит үлдэгдэл
+      xml:
+        name: tokenResponse
+    AccountBalanceResponse:
+      required:
+        - type
+        - currency
+        - balance
+        - name
+        - holdBalance
+        - avaliableBalance
+      type: object
+      properties:
+        type: 
+          type: string
+          example: string
+          description: Дансны төрөл
+        currency:
+          type: string
+          example: string
+          description: Дансны валют
+        balance:
+          type: integer
+          example: double
+          description: Үлдэгдэл
+        name:
+          type: string
+          example: string
+          description: Дансны нэр
+        holdBalance:
+          type: integer
+          example: double
+          description: Барилт хийсэн дүн
+        avaliableBalance:
+          type: integer
+          example: double
+          description: Боломжит үлдэгдэл
+      xml:
+        name: tokenResponse
+    
+    TransferDomestic:
+      required:
+        - fromAccount
+        - toAccount
+        - amount
+        - description
+        - currency
+        - transferid
+        - loginName
+        - tranPassword
+      type: object
+      properties:
+        fromAccount:
+          type: string
+          example: string
+          description: Гүйлгээ хийх дансны дугаар
+        toAccount: 
+          type: string
+          example: string
+          description: Хүлээн авах дансны дугаар
+        amount:
+          type: string
+          example: string
+          description: Гүйлгээний дүн
+        description  :
+          type: string
+          example: string
+          description: Гүйлгэний утга
+        currency  :
+          type: string
+          example: string
+          description: валют
+        transferid  :
+          type: string
+          example: string
+          description: Гүйлгээний дугаар
+        loginName  :
+          type: string
+          example: string
+          description: Интернэт банк руу нэвтрэх эрх
+        tranPassword  :
+          type: string
+          example: string
+          description: Корпорэйт портал-р үүсгэсэн гүйлгээний нууц
+      xml:
+        name: transferDomestic
+    uploadFile:
+      required:
+        - file
+        - filename
+        - fromAccount
+        - purpose
+        - paymentAccount
+      type: object
+      properties:
+        file:
+          type: string
+          example: string
+          description: Base64-руу хөрвүүлсэн багц шилжүүлгийн excel файл
+        filename: 
+          type: string
+          example: string
+          description: Файлын нэр /багц шилжүүлгийн хувьд "bulk-transaction" гэсэн default утгатай байна, Гүйлгээний жагсаалтын хувьд list-transaction гэсэн default утгатай байна/
+        fromAccount:
+          type: string
+          example: string
+          description: Шилжүүлэг хийх дансны дугаар байна
+        purpose  :
+          type: string
+          example: string
+          description: 4-оронтой латин үсэг бүхий утга оруулна. Гүйлгээний зориулалтын төрлүүд /Жишээ нь цалингийн гүйлгээний хувьд SALA (гүйлгээний зориулалтын төрлийг ACH системийн дүрмийн адгуу ашиглах ба жишээ төрлүүдийг 3с хэсгээс харна уу)
+        paymentAccount  :
+          type: string
+          example: string
+          description: “Багц шилжүүлэг дамжуулах тооцооны харилцах данс” бүтээгдэхүүний дансны дугаарыг оруулна. Тооцооны харилцах дансгүй тохиолдолд багц шилжүүлэг дамжуулах боломжгүй.
+      xml:
+        name: uploadFile
+    uploadFileResponse:
+      required:
+        -  masterId
+      type: object
+      properties:
+        masterId:
+            type: string
+            example: string
+            description: Тухайн багц шилжүүлгийн дугаарыг илэрхийлэх Master ID байна. Хэрэв файлийг системд уншуулахад алдаа заасан бол алдааны мессеж харуулна.
+      xml:
+        name: uploadFileResponse
+    message:
+      required:
+        -  message
+      type: object
+      properties:
+        masterId:
+            type: string
+            example: string
+            description: "Устгах үйлдлийг хийхэд амжилтгүй болбол амжилтгүй болсон шалтгааны хариуулна. Амжилттай устгагдсан тохиолдолд endpoint хариу өгөхгүй."
+      xml:
+        name: message
+    salary:
+      required:
+        - masterId
+        - password
+        - username
+      type: object
+      properties:
+        masterId:
+            type: string
+            example: string
+            description: "Гүйлгээний MasterID"
+        password:
+            type: string
+            example: string
+            description: "Гүйлгээний нууц үг /Base64-руу хөрвүүлэхгүй/"
+        username:
+            type: string
+            example: string
+            description: "Гүйлгээ хийх ажилтны нэвтрэх нэр"
+      xml:
+        name: salary
+    salaryResponse:
+      required:
+        - dt
+        - fileTypeId
+        - purposeTypeId
+        - Description
+        - fromAccount
+        - id
+        - status
+        - totalPromo
+        - totalAmount
+        - totalCnt
+        - errorCnt
+        - errorAmount
+        - errorCntTran
+        - errorAmountTran
+        - email
+        - paymentAccount
+        - journal
+      type: object
+      properties:
+        masterId:
+            type: string
+            example: string
+            description: "Гүйлгээ хийсэн он/сар/өдөр {YearMonthDate}Жишээ нь:{20221023}"
+        password:
+            type: string
+            example: string
+            description: "Гүйлгээний төрөл /bulk-transaction, list-transaction гэсэн 2 утгын аль нэг байна/"
+        username:
+            type: integer
+            example: integer
+            description: "Багц гүйлгээ: Шилжүүлэг хийх буюу зарлага хийгдэх дансны дугаар байна.
+Жагсаалтын гүйлгээ: Шилжүүлэг хийх дансны дугаарыг Excel файл дээр оруулах тул ерөнхий лавлагааны endpoint null утга буцаана."
+        id:
+            type: integer
+            example: integer
+            description: "Гүйлгээний файлын Master ID дугаар"
+        status:
+            type: string
+            example: string
+            description: "transfered = 'T', /Гүйлгээ Амжилттай Шилжсэн/
+transfered_error = 'TE', /Амжилтгүй гүйлгээтэй /
+fee_transfer_error = 'FE', / Шимтгэлийн гүйлгээ алдаатай/
+TRANSFER_PENDING = 'PHP',/Гүйлгээг боловсруулж байна/
+TRANSFER_PENDING_ERROR = 'PHE',/Системийн алдаа гарсан үед/
+TRANSFER_WAITING = 'WG',/ Гүйлгээг боловсруулж байна /
+CORRECTION_TRANSFER_ERROR = 'CTE',/Тооцооны данснаас харилцах дансруу буцаалтын гүйлгээ амжилтгүй буюу Системийн алдаа гарсан үед /
+FROM_TO_PAYMENT_ERROR = 'FPE',/Харилцахаас тооцооны дансруу гүйлгээ ажмжилтгүй буюу Системийн алдаа гарсан үед /"
+        totalPromo:
+            type: integer
+            example: integer
+            description: "Гүйлгээний нийт шимтгэл"
+        totalAmount:
+            type: integer
+            example: integer
+            description: "Гүйлгээний нийт дүн"
+        totalCnt:
+            type: integer
+            example: integer
+            description: "Гүйлгээний нийт тоо"
+        errorCnt:
+            type: integer
+            example: integer
+            description: "Алдаатай мөртэй гүйлгээний тоо"
+        errorAmount:
+            type: integer
+            example: integer
+            description: "Алдаатай мөртэй гүйлгээний дүн"
+        errorCntTran:
+            type: integer
+            example: integer
+            description: "Амжилтгүй гүйлгээний тоо/ Гүйлгээ хийхээс өмнө “null” утга буцаана/"
+        errorAmountTran:
+            type: integer
+            example: integer
+            description: "Амжилтгүй гүйгээний дүн /Гүйлгээ хийхээс өмнө “null” утга буцаана/"
+        email:
+            type: string
+            example: string
+            description: "Байгууллагын Корпорэйт Гэтвэйд бүртгэлсэн мэйл хаяг"
+        paymentAccount:
+            type: integer
+            example: integer
+            description: "Багц шилжүүлэг дамжуулах байгууллагын тооцооны дансны дугаар"
+        journal:
+            type: integer
+            example: integer
+            description: "Гүйлгээний журнал дугаар"
+      xml:
+        name: salaryResponse
+    stateResponse:
+      required:
+        - dt
+        - fileTypeId
+        - purposeTypeId
+        - description
+        - fromAccount
+        - id
+        - status
+        - totalPromo
+        - totalAmount
+        - totalCnt
+        - errorCnt
+        - errorAmount
+        - errorCntTran
+        - email
+        - paymentAccount
+        - journal
+      type: object
+      properties:
+        dt:
+          type: string
+          example: string
+          description: Он сар өдөр {YearMonthDate}Жишээ нь:{20221023}
+        fileTypeId:
+          type: string
+          example: string
+          description: Гүйлгээний төрөл /Багц шилжүүлгийн үйлчилгээ bulk-transaction, Гүйлгээний жагсаалтын үйлчилгээ list-transaction гэсэн 2 утгын аль нэг байна/
+        purposeTypeId:
+          type: string
+          example: string
+          description: Харилцагчийн сонгосон гүйлгээний зориулалт байна
+        description:
+          type: string
+          example: string
+          description: Гүйлгээний утга /гүйлгээ хийхээс өмнө null утга буцаана/
+        fromAccount:
+          type: string
+          example: string
+          description: "Багц гүйлгээ: Шилжүүлэг хийх буюу зарлага хийгдэх дансны дугаар байна. Жагсаалтын гүйлгээ: Шилжүүлэг хийх дансны дугаарыг Excel файл дээр оруулах тул ерөнхий лавлагааны endpoint null утга буцаана."
+        id:
+          type: string
+          example: string
+          description: "Дахин давтагдашгүй файл тус бүрт үүсгэх Master ID"
+        status:
+          type: string
+          example: string
+          description: "– inserted буюу гүйлгээний файлыг upload хийсэн
+C – checking буюу гүйлгээний файлын validation шалгаж байгаа
+V – valid буюу гүйлгээний файлыг амжилттай шалгаж гүйлгээний файл алдаагүй үед тус төлөвийг харуулна. Гүйлгээний статус V заасан үед гүйлгээг хийх боломжтой байна.
+IV – invalid буюу гүйлгээний файлыг шалгаж гүйлгээний файлд алдаа заасан
+VE – гүйлгээний файлийг шалгах явцад системийн алдаа гарсан
+Анхаарах: Уг статус зөвхөн Valid үед гүйгээг дамжуулах боломжтой."
+        totalPromo:
+          type: string
+          example: string
+          description: "Гүйлгээний нийт шимтгэл"
+        totalAmount:
+          type: string
+          example: string
+          description: "Гүйлгээний нийт дүн"
+        totalCnt:
+          type: string
+          example: string
+          description: "Гүйлгээний нийт тоо"
+        errorCnt:
+          type: string
+          example: string
+          description: "Алдаатай мөртэй гүйлгээний тоо"
+        errorAmount:
+          type: string
+          example: string
+          description: "Алдаатай мөртэй гүйлгээний дүн"
+        errorCntTran:
+          type: string
+          example: string
+          description: "Амжилтгүй гүйлгээний тоо/ Гүйлгээ хийхээс өмнө “null” утга буцаана/"
+        errorAmountTran:
+          type: string
+          example: string
+          description: "Амжилтгүй гүйгээний дүн /Гүйлгээ хийхээс өмнө “null” утга буцаана"
+        email:
+          type: string
+          example: string
+          description: "Байгууллагын Корпорэйт Гэтвэйд бүртгэлсэн мэйл хаяг"
+        paymentAccount:
+          type: string
+          example: string
+          description: "Багц шилжүүлэг дамжуулах байгууллагын тооцооны дансны дугаар" 
+        journal:
+          type: string
+          example: string
+          description: "Файл шалгах шатанд хоосон байна"
+      xml: 
+        name: stateResponse
+        
+    stateResponseDetail:
+      required:
+        - detail
+        - master_id
+        - row_no
+        - status
+        - accno
+        - currency
+        - message
+        - txnam
+        - txnBaseAmount
+        - txnDate
+        - rateFrom
+        - rateTo
+        - transactionStatus
+        - journal
+        - detailPromo
+        - feePaid
+        - bankCode
+        - description
+        - transactionType
+        - fromCurrency
+        - purpose
+        - fromAccountName
+        - itemsCorp
+        - value
+        - fieldDescription
+      type: object
+      properties:
+        detail:
+            type: string
+            example: string
+            description: "Header"
+        master_id:
+            type: string
+            example: string
+            description: "Тухайн багц шилжүүлгийн/гүйлгээний жагсаалтын master ID"
+        row_no:
+            type: string
+            example: string
+            description: "Гүйлгээний мөрийн дугаар. Жишээ нь: row_no: 1,Гүйлгээний файлийн 1-р мөр дэх гүйлгээг илэрхийлнэ."
+        status:
+            type: string
+            example: string
+            description: "True – Тухайн мөрний гүйлгээний файлийг шалгахад тухайн мөр алдаагүй үед харуулна.
+False – Тухайн мөрний гүйлгээний файлийг шалгахад тухайн мөр алдаатай үед харуулна."
+        accno:
+            type: string
+            example: string
+            description: "Хүлээн авагчийн дансны дугаар"
+        currency:
+            type: string
+            example: string
+            description: "Шилжүүлгийн валют байх ба шилжүүлгийн валют зөвхөн MNT байна."
+        message:
+            type: string
+            example: string
+            description: "Тухайн мөрний гүйлгээ validation алдаатай үед Алдааны мессеж харуулна."
+        txnam:
+            type: string
+            example: string
+            description: "Шилжүүлгийн дүн"
+        txnBaseAmount:
+            type: string
+            example: string
+            description: "Хөрвүүлэгтэй гүйлгээний хувьд суурь валютын дүнг харуулна. Хөрвүүлэг хийгдээгүй тохиолдолд “null” утга агуулна"
+        txnDate:
+            type: string
+            example: string
+            description: "Гүйлгээний огноо"
+        rateFrom:
+            type: string
+            example: string
+            description: "Валютын хөрвүүлэг хийгдэх үед ханш татагдана /MNT гүйлгээний хувьд 1.0 байна/"
+        rateTo:
+            type: string
+            example: string
+            description: "Валютын хөрвүүлэг хийгдэх үед ханш татагдана /MNT гүйлгээний хувьд 1.0 байна/"
+        transactionStatus:
+            type: string
+            example: string
+            description: "Гүйлгээ хийх action-ий дараа статус солих тул гүйлгээ хийхээс өмнө Null байна."
+        journal:
+            type: string
+            example: string
+            description: "Гүйлгээ хийх action-ий дараа статус солих тул гүйлгээ хийхээс өмнө Null байна."
+        detailPromo:
+            type: string
+            example: string
+            description: "Гүйлгээний шимтгэл"
+        feePaid:
+            type: string
+            example: string
+            description: "Гүйлгээ хийхээс өмнө null утга буцаана"
+        bankCode:
+            type: string
+            example: string
+            description: "Банкны код жишээ нь ХААН банк 050000, Голомт банк 150000. Нийт банкны кодыг ЭНЭ холбоосоор лавлах боломжтой."
+        description:
+            type: string
+            example: string
+            description: "Гүйлгээний утга"
+        transactionType:
+            type: string
+            example: string
+            description: "D – Банк дотор
+I – Банк хооронд"
+        fromCurrency:
+            type: string
+            example: string
+            description: "Шилжүүлэг хийх дансны валют байна"
+        purpose:
+            type: string
+            example: string
+            description: "Гүйлгээний зориулалтын код"
+        fromAccountName:
+            type: string
+            example: string
+            description: "Шилжүүлэгчийн дансны нэр"
+        itemsCorp:
+            type: string
+            example: string
+            description: "Header"
+        value:
+            type: string
+            example: string
+            description: "Мөр бүрт харилцагчийн ирүүлсэн утга"
+        fieldDescription:
+            type: string
+            example: string
+            description: "харилцагчийн ирүүлсэн утга заасан баганы нэр"
+      xml:
+        name: stateResponseDetail
+            
+    TransferDomesticResponse:
+      required:
+        - token
+        - developer_email
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: string
+          description: Гүйлгээний код
+        journalNo: 
+          type: string
+          example: string
+          description: Журнал дугаар
+        transferid:
+          type: string
+          example: string
+          description: Гүйлгээний дугаар
+        systemDate:
+          type: string
+          example: string
+          description: Гүйлгээ хийгдсэн огноо
+      xml:
+        name: transferDomesticResponse
+        
+    TransferInter:
+      required:
+        - transferid
+        - fromAccount
+        - toAccount
+        - currency
+        - amount
+        - description
+        - toCurrency
+        - accounName
+        - loginName
+        - tranPassword
+        - toBank
+      type: object
+      properties:
+        fromAccount:
+          type: string
+          example: string
+          description: Гүйлгээ хийх дансны дугаар
+        toAccount: 
+          type: string
+          example: string
+          description: Хүлээн авах дансны дугаар
+        amount:
+          type: string
+          example: string
+          description: Гүйлгээний дүн
+        description  :
+          type: string
+          example: string
+          description: Гүйлгэний утга
+        currency  :
+          type: string
+          example: string
+          description: валют
+        transferid  :
+          type: string
+          example: string
+          description: Гүйлгээний дугаар
+        loginName  :
+          type: string
+          example: string
+          description: Интернэт банк руу нэвтрэх эрх
+        tranPassword  :
+          type: string
+          example: string
+          description: Корпорэйт портал-р үүсгэсэн гүйлгээний нууц
+        toCurrency  :
+          type: string
+          example: string
+          description: Хүлээн авах валют зөвхөн MNT байна
+        toBank    :
+          type: string
+          example: string
+          description: Хүлээн авах банкны код
+      xml:
+        name: transferDomestic
+        
+    AccountDetailResponse:
+      required:
+        - Number
+        - Type
+        - Currency
+        - OpenDate
+        - Status
+        - Balance
+        - Name
+        - Holdbalance
+        - AvalaibleBalance
+        - Home branch
+        - Intcategory
+        - IntMethod
+        - IntRate
+        - CustomerName
+        - Homephone
+        - businessPhone
+        - LastMaintenceDate
+        - LastFinancialTranDate
+        - intFrom
+        - intTo
+        - creditExpDate
+        - currentBalance
+        - unclearedFunds
+        - intAmt
+        - passBkBal
+        - noIntValDisplay
+        - inFlatorAmt
+        - prevPeriadDebitIntAdj 
+        - ytdInt
+        - lastOverLimitDate
+        - withHoldingTaxExemption
+        - nonResidentDetailsCaptureOpt
+        - stmtFreq
+        - stmtCycle
+        - stmtFreqDay
+        - postDate
+        - glClassificationCode
+        - commitmentIntIncrement
+        - acctTypeChgDate
+        - dailyIntAmt
+        - serviceAmt
+        - overdraftInt
+        - cashAvailBal
+        - addOnRate
+        - pledgeAmt
+        - cumPledgeAmt
+        - employeeTrfAmt
+        - employerTrfAmt
+        - employeeContIntAccr
+        - employerContIntAccr
+        - Addr1
+        
+      type: object
+      properties:
+        Number:
+          type: string
+          example: string
+          description: Дансны дугаар
+        Type: 
+          type: string
+          example: string
+          description: Дансны төрөл
+        Currency:
+          type: string
+          example: string
+          description: Валют
+        OpenDate:
+          type: string
+          example: string
+          description: Данс нээсэн огноо
+        Status:
+          type: string
+          example: string
+          description: Төлөв
+        Balance:
+          type: string
+          example: string
+          description: Дансны үлдэгдэл
+        Name:
+          type: string
+          example: string
+          description: Дансны нэр
+        Holdbalance:
+          type: string
+          example: string
+          description: Барилт хийсэн дүн
+        AvalaibleBalance:
+          type: string
+          example: string
+          description: Боломжит үлдэгдэл
+        Home branch:
+          type: string
+          example: string
+          description: Салбар
+        Intcategory:
+          type: string
+          example: strin
+        IntMethod:
+          type: string
+          example: string
+          description: Хүү бодох арга
+        IntRate:
+          type: string
+          example: string
+          description: Хүү /жилийн/
+        CustomerName:
+          type: string
+          example: string
+          description: Харилцагчийн нэр
+        Homephone:
+          type: string
+          example: string
+          description: Гэрийн утас
+        businessPhone:
+          type: string
+          example: string
+          description: Ажлын утас
+        LastMaintenceDate:
+          type: string
+          example: string 'yyyy/mm/dd'
+          description: Сүүлд засвар хийсэн огноо
+        LastFinancialTranDate:
+          type: string
+          example: string 'yyyy/mm/dd'
+          description: Сүүлд гүйлгээ хийсэн огноо
+        intFrom:
+          type: string
+          example: string
+          description: Хүү олгосон огноо
+        intTo:
+          type: string
+          example: string
+          description: Хүү олгох огноо
+        creditExpDate:
+          type: string
+          example: string
+        currentBalance:
+          type: string
+          example: string
+          description: Цэвэр үлдэгдэл
+        unclearedFunds:
+          type: string
+          example: string
+          description: Клиринг хийгдээгүй
+        intAmt:
+          type: string
+          example: string
+          description: Хуримтлагдсан хүү
+        passBkBal:
+          type: string
+          example: string
+          description: Дэвтрийн үлдэгдэл
+        noIntValDisplay:
+          type: string
+          example: string
+        inFlatorAmt:
+          type: string
+          example: string
+        prevPeriadDebitIntAdj:
+          type: string
+          example: string
+          description: Өмнөх хүү тохируулга
+        ytdInt:
+          type: string
+          example: string
+          description: Оны өссөн хүү
+        lastOverLimitDate:
+          type: string
+          example: string
+          description: Сүүлчийн улайлт
+        withHoldingTaxExemption:
+          type: string
+          example: string
+        nonResidentDetailsCaptureOpt:
+          type: string
+          example: string
+        stmtFreq:
+          type: string
+          example: string
+          description: Хуулга давтамж
+        stmtCycle:
+          type: string
+          example: string
+        stmtFreqDay:
+          type: string
+          example: string
+          description: Хуулга өдөр
+        postDate:
+          type: string
+          example: string
+        glClassificationCode:
+          type: string
+          example: string
+        commitmentIntIncrement:
+          type: string
+          example: string
+          description: Коммитмент хүү ханш
+        acctTypeChgDate:
+          type: string
+          example: string
+          description: Дансны шинж өөрчилсөн огноо
+        dailyIntAmt:
+          type: string
+          example: string
+          description: Өдрийн хүү
+        serviceAmt:
+          type: string
+          example: string
+        overdraftInt:
+          type: string
+          example: string
+          description: Улайлтын хүү
+        cashAvailBal:
+          type: string
+          example: string
+        addOnRate:
+          type: string
+          example: string
+        pledgeAmt:
+          type: string
+          example: string
+        cumPledgeAmt:
+          type: string
+          example: string
+        employeeTrfAmt:
+          type: string
+          example: string
+        employerTrfAmt:
+          type: string
+          example: string
+        employeeContIntAccr:
+          type: string
+          example: string
+        employerContIntAccr:
+          type: string
+          example: string
+        Addr1:
+          type: string
+          example: string
+      xml:
+        name: transferDomesticResponse
+
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+        
+    StatementsResponse:
+      required:
+        - account
+        - currency
+        - customerName
+        - productName
+        - branch
+        - branchName
+        - beginBalance
+        - endBalance
+        - beginDate
+        - endDate
+        - total
+        - count
+        - credit
+        - debit
+        - record
+        - tranDate
+        - postDate
+        - time
+        - teller
+        - journal
+        - amount
+        - balance
+        - description
+        - relatedAccount
+      type: object
+      properties:
+        account:
+          type: string
+          example: string
+          description: Дансны дугаар
+        Currency:
+          type: string
+          example: string
+          description: Валют
+        customerName:
+          type: string
+          example: string
+          description: Харилцагчийн нэр
+        productName:
+          type: string
+          example: string
+          description: Бүтээгдэхүүний нэр
+        branch:
+          type: string
+          example: string
+          description: Салбар
+        branchName:
+          type: string
+          example: string
+          description: Салбарын нэр
+        beginBalance:
+          type: integer
+          example: double
+          description: Эхлэх огнооны байдлаарх дүн
+        endBalance:
+          type: integer
+          example: double
+          description: Сүүлийн огнооны байдлаарх дүн
+        beginDate:
+          type: string
+          example: strin
+          description: Эхлэх огноо
+        endDate:
+          type: string
+          example: string
+          description: Сүүлийн огноо
+        total:
+          type: string
+          example: string
+          description: Нийт
+        count:
+          type: integer
+          example: integer
+          description: Шүүлтийн огнооны байдлаарх нийт илэрсэн гүйлгээний тоо
+        credit:
+          type: integer
+          example: double
+          description: Орлогын дүн
+        debit:
+          type: integer
+          example: double
+          description: Зарлагын дүн
+        record:
+          type: integer
+          example: integer 
+          description: Гүйлгээний дугаар
+        tranDate:
+          type: string
+          example: string
+          description: Шилжүүлэг хийсэн огноо
+        postDate:
+          type: string
+          example: string
+          description: Гүйлгээ хийгдсэн огноо
+        time:
+          type: string
+          example: hhmmssss
+          description: Цаг:hhmmssss-> hh:цаг, mm:минут, ssss:секунд доль
+        teller:
+          type: string
+          example: string
+          description: Теллер
+        journal:
+          type: string
+          example: string
+          description: Дансанд санхүүгийн бүртгэл үүссэн дугаар
+        amount:
+          type: integer
+          example: double 
+          description: Гүйлгээний дүн
+        balance:
+          type: string
+          example: string
+          description: Үлдэгдэл
+        description:
+          type: string
+          example: string
+          description: Гүйлгээний утга
+        relatedAccount:
+          type: string
+          example: string
+          description: Харьцсан дансны нэр /Зөвхөн банк доторх гүйлгээ дээр гарна. /
+      xml:
+        name: transferDomesticResponse
+    AccountNameResponse:
+      required:
+        - Account
+        - Number
+        - Currency
+        - Customer
+        - CustFirstName
+        - CustLastName
+      type: object
+      properties:
+        Account:
+          type: string
+          example: string
+        Number: 
+          type: string
+          example: string
+          description: Дансны дугаар
+        Currency:
+          type: string
+          example: string
+          description: Валют
+        Customer:
+          type: string
+          example: string
+        CustFirstName:
+          type: string
+          example: string
+          description: Данс эзэмшигчийн нэр
+        CustLastName:
+          type: string
+          example: string
+          description: Данс эзэмшичгйин овог /Масклагдсан/
+      xml:
+        name: transferDomesticResponse
+        
+    Currency:
+      required:
+        - currency  
+        - midRate
+        - buyRate
+        - sellRate
+        - cashBuyRate
+        - cashSellRate
+        - name
+      type: object
+      properties:
+        currency:
+          type: string
+          example: string
+          description: Валют
+        midRate:
+          type: string
+          example: string
+          description: Монгол банкны ханш
+        buyRate:
+          type: string
+          example: string
+          description: Худалдаж авах ханш
+        sellRate:
+          type: string
+          example: string
+          description: Худалдах ханш
+        cashBuyRate:
+          type: string
+          example: string
+          description: Бэлэн худалдаж авах ханш
+        cashSellRate:
+          type: string
+          example: string
+          description: Бэлэн худалдах ханш
+        name:
+          type: string
+          example: string
+          description: Ханшны нэр
+      xml:
+        name: Bulk
+    
+  securitySchemes:
+    petstore_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
